@@ -1,0 +1,44 @@
+version: 2
+
+
+jobs:
+  build:
+    docker: 
+      - image: circleci/python:3.7.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - restore_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run:
+          name: Update version of npm
+          command: sudo pip install pipenv virtualenv
+      - run:
+          name: install project dependencies
+          command: pipenv install
+      - run:
+          name: install project dev dependencies
+          command: pipenv install --dev
+      - run:
+          name: install pytest dev dependencies
+          command: pipenv install pytest --dev
+      - save_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.7/site-packages"
+      - run: 
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run: 
+          name: contains code coverage report
+          command: |
+            ./cc-test-reporter before-build
+            pipenv run pytest --cov=api/ tests --cov-report xml
+            ./cc-test-reporter after-build
+

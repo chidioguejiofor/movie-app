@@ -8,9 +8,12 @@ flask = "*"
 flask-sqlalchemy = "*"
 "psycopg2" = "*"
 python-dotenv = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 pytest = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.7"
