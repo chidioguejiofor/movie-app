@@ -10,10 +10,15 @@ flask-sqlalchemy = "*"
 python-dotenv = "*"
 pytest = "*"
 pytest-cov = "*"
+flask-migrate = "*"
+marshmallow = "*"
+flask-restplus = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
+"pep8" = "*"
+pydocstyle = "*"
 
 [requires]
 python_version = "3.7"
