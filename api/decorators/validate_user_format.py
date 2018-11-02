@@ -12,4 +12,5 @@ def validate_user_decorator(f):
                     'message':  'the json object with username, password and email is required'
                 }
             }, 400)
+            
     return inner_wrapper
