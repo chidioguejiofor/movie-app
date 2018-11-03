@@ -14,6 +14,7 @@ flask-migrate = "*"
 marshmallow = "*"
 flask-restplus = "*"
 pyjwt = "*"
+flask-excel = "*"
 
 [dev-packages]
 pytest = "*"

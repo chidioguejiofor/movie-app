@@ -3,16 +3,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from ..helpers.auth_helpers import generate_token
+from .base_model import BaseModel
 
-class User(db.Model):
+class User(BaseModel):
     __tablename__ = 'users'
 
-    id = db.Column(db.String, primary_key = True, default = str(uuid.uuid4()))
+    
     username = db.Column(db.String(60), nullable = False, unique = True)
     password_hash = db.Column(db.String, nullable = False)
     email = db.Column(db.String(256), nullable = False, unique = True)
-    created_at = db.Column(db.DateTime(), default = db.func.current_timestamp())
-
+    movies = db.relationship('Movie', backref = 'owner')
 
     def check_password(self, password_value):
         return check_password_hash(self.password_hash, password_value)
@@ -27,11 +27,12 @@ class User(db.Model):
             'id': self.id, 
             'username': self.username, 
             'email': self.email, 
-            'createdAt': str(self.created_at)
+            'createdAt': str(self.created_at),
+            'updatedAt': str(self.updated_at)
         }
 
         return {
-            **json_obj,
+            **json_obj, 
             'token': generate_token(json_obj)
         }
 
@@ -49,15 +50,9 @@ class User(db.Model):
 
     def load_from_db(self, user_password):
         found_user = User.query.filter_by(username = self.username).first()
+
         if found_user and check_password_hash(self.password_hash, user_password):
             return found_user.get_json_object()
 
         return False
 
-
-
-    def delete(self):
-        db.session.remove(self)
-        db.session.commit()
-    
-        

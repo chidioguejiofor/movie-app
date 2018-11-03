@@ -25,7 +25,7 @@ class SignUpResource(Resource):
             return user.get_json_object()
         
 
-        return user_data, 406
+        return user_data, 400
         
     
 
