@@ -39,10 +39,7 @@ class User(BaseModel):
     
     @password.setter
     def password(self, value):
-        print('the golden password:')
-        
         self.password_hash = generate_password_hash(value)
-        print(self.password_hash)
     
     def save(self):
         db.session.add(self)

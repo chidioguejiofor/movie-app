@@ -1,9 +1,19 @@
-from marshmallow import Schema
+from marshmallow import fields
+from .base_schema import BaseSchema
 
+class MovieSchema(BaseSchema):
 
-class MovieSchema(Schema):
+    title = fields.String(required=True, error_messages={
+        'required': 'the title is a required field'
+    })
+    description =  fields.String(required=True)
+    url = fields.String(required=True)
+    
+    def load_object_into_schema(self, input_data, partial = False):
+        """Helper function to load python objects into schema"""
 
-    title = db.Column(db.String)
-    description = db.Column(db.String)
-    url = db.Column(db.String)
-    owner_id = db.Column(db.String, db.ForeignKey('users.id'))
+        data, errors = self.load(input_data, partial = partial)
+        if errors:
+            return errors, False
+        
+        return data, True

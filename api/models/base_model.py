@@ -13,11 +13,11 @@ class BaseModel(db.Model):
     @abstractmethod
     def get_json_obj(self): pass
 
-    def save():
+    def save(self):
         db.session.add(self)
-        db.save()
+        db.session.commit()
 
-    def delete():
+    def delete(self):
         db.session.remove()
         db.save()
     

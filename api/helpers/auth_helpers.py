@@ -6,5 +6,9 @@ def generate_token(data, expiration=datetime.timedelta(days=1)):
 
     return jwt.encode({
         **data, 
-        'exp': str(datetime.datetime.utcnow() + expiration),
+        'exp': datetime.datetime.utcnow() + expiration,
     }, SECRET_KEY, algorithm='HS256').decode('utf-8')
+
+
+def decode_token(token):
+    return jwt.decode(token, SECRET_KEY,'utf-8', algorithm='HS256')

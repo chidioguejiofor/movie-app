@@ -1,11 +1,11 @@
 from marshmallow import fields, Schema, post_load, validates, ValidationError
 from ..utilities.validator import string_60_validator
 from ..models.users import User
+from .base_schema import BaseSchema
 
 
 
-
-class AuthSchema(Schema):
+class AuthSchema(BaseSchema):
     username = fields.String(
         required = True, 
         validators = (string_60_validator), 
@@ -21,14 +21,6 @@ class AuthSchema(Schema):
             'required': 'the password is a required field'
         }
     )
-
-    def load_object_into_schema(self, user, partial = False):
-        """Helper function to load python objects into schema"""
-        data, errors = self.load(user, partial = partial)
-        if errors:
-            return errors, False
-           
-        return data, True
 
 
 class SignupSchema(AuthSchema):

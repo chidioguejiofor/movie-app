@@ -1,6 +1,6 @@
 from api import api
 from flask import request, jsonify, Response, json
-from api.decorators.validate_user_format import validate_user_decorator 
+from ..decorators.json_validator_decorator import check_json_decorator 
 from ..models.users import User
 from ..schemas.user import SignupSchema, AuthSchema
 from flask_restplus import Resource
@@ -11,7 +11,7 @@ from marshmallow.exceptions import ValidationError
 @api.route('/signup')
 class SignUpResource(Resource):
         
-    @validate_user_decorator
+    @check_json_decorator('the json object with username, password and email is required')
     def post(self):
 
         request_data = request.get_json()
@@ -33,7 +33,7 @@ class SignUpResource(Resource):
 @api.route('/login')
 class LoginResource(Resource):
         
-    @validate_user_decorator
+    @check_json_decorator('you must provide username and password in the json object')
     def post(self):
 
         request_data = request.get_json()
@@ -52,7 +52,7 @@ class LoginResource(Resource):
                     }
                 })
         
-        return user_data, 406
+        return 'user_data', 406
         
     
    
